@@ -54,7 +54,7 @@
     </form>
   </div>
   <script>
-    testGroup = Math.random() * 2 < 0 ? 'control' : 'test';
+    testGroup = Math.random() * 2 < 1 ? 'control' : 'test';
     $('#testGroup').val(testGroup);
     $('#emailForm').submit(function (e) {
       email = $('#email').val();
@@ -92,15 +92,15 @@
       <p>Press record and speak the question below</p>
     </div>
     <div class="well">
-      <p id="target" width="20" height="3" disabled>
+      <p id="target">
       </p>
     </div>
     
     <p id="message"></p>
 
-    <div class="well">
-      <p id="feedback" data-recording="false" width="20" height="5" disabled class="<?=$feedbackClass;?>">
-        <h6 class="small"><i>No audio received yet...</i></h6>
+    <div class="well <?=$feedbackClass;?>">
+      <p id="feedback">
+        <i class="small">No audio received yet...</i>
       </p>
     </div>
 

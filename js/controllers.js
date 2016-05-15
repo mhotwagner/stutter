@@ -73,6 +73,7 @@ recognition.onresult = function(event) {
 
 // UX handling
 function clickHandler(event) {
+    event.preventDefault();
     if (recognizing) {
         recognition.stop();
     } else {
