@@ -1,7 +1,7 @@
 // speech recognition
 var recognizing = false;
 var recognition = new webkitSpeechRecognition();
-recognition.continuous = true;
+recognition.continuous = false;
 recognition.interimResults = true;
 
 recognition.onstart = function() {
@@ -28,32 +28,41 @@ recognition.onerror = function(event) {
 };
 
 function evaluate() {
-    if (finalTranscript.toLowerCase() == target.toLowerCase()) {
-        alert('Correct!');
+    if (finalTranscript.toLowerCase() == target.toLowerCase().slice(0,-1)) {
+        isCorrect = true;
+        $('#message').html('Correct! Click Next below to continue.');
     } else {
-        alert('Incorrect!\nWe heard "' + finalTranscript + '"');
+        isCorrect = false;
+        if (testGroup == 'test') {
+            $('#message').html('Incorrect. Please review what the system heard below. Click Next when you are ready to continue.');
+        } else {
+            $('#message').html('Incorrect.');
+        }
     }
+    handleQuestionComplete();
 }
 recognition.onend = function() {
-    console.log('this thing')
     recognizing = false;
     if (ignore_onend) {
         return;
     }
+    if (finalResults[0] == undefined) {
+        $('#toggleMic').html('Record Again');
+        alert('Error capturing audio.\nPlease press Record Again to recapture.');
+        return false;
+    }
+    $('#toggleMic').html('Recording Captured');
     if (!finalTranscript) {
-        console.log('in here!')
         updateInfo(INITIAL_INFO);
         finalTranscript = finalResults[0][0].transcript;
-        console.log(finalTranscript);
         pushTranscript(finalTranscript);
         evaluate();
-        return;
     }
 };
 
 recognition.onresult = function(event) {
-    console.log('Got a result!')
-    var transcript = []
+    // console.log('Got a result!')
+    var transcript = [];
     for (var i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal && !(i in finalResults)) {
             finalResults[i] = event.results[i];
@@ -66,12 +75,13 @@ recognition.onresult = function(event) {
 function clickHandler(event) {
     if (recognizing) {
         recognition.stop();
-        return;
+    } else {
+        $('#toggleMic').html('Recording...');
+        finalTranscript = '';
+        recognition.lang = lang;
+        recognition.start();
+        ignore_onend = false;
     }
-    finalTranscript = '';
-    recognition.lang = lang;
-    recognition.start();
-    ignore_onend = false;
     // start_timestamp = event.timeStamp;
 }
 
@@ -85,7 +95,7 @@ ERROR_NO_MIC_INFO = 'ERROR: NO microphone detected';
 ERROR_BLOCKED_INFO = 'ERROR: Microphone was blocked';
 
 function pushTranscript(content) {
-    $('#content').html(formatContent(content));
+    $('#feedback').html(formatContent(content));
 }
 
 function updateInfo(info) {

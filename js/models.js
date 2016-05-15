@@ -1,9 +1,10 @@
-var db = new Firebase("https://stutter-dev.firebaseio.com/");
+var db = new Firebase("https://stutter.firebaseio.com/");
 
 
-function Answer(user, questionText, isCorrect) {
+function Answer(user, index, questionText, isCorrect) {
     this.id = null;
     this.userId = user.id;
+    this.index = index;
     this.questionText = questionText;
     this.isCorrect = isCorrect;
     this.fields = ['questionText', 'isCorrect'];
@@ -19,8 +20,8 @@ Answer.prototype = {
 
 };
 
-function User(email, testGroup) {
-    this.id = null;
+function User(email, testGroup, id) {
+    this.id = id == undefined ? null : id;
     this.email = email;
     this.testGroup = testGroup;
     this.answers = [];
@@ -33,22 +34,11 @@ User.prototype = {
     save: function() {
         dbSave(this);
     },
-    attachAnswer: function(questionText, isCorrect) {
-        answer = new Answer(this, questionText, isCorrect);
+    attachAnswer: function(index, questionText, isCorrect) {
+        answer = new Answer(this, index, questionText, isCorrect);
         answer.save();
         this.answers.push(answer);
     }
-};
-
-function Response(user) {
-    this.id = null;
-    this.user = user;
-    this.answers = [];
-
-
-}
-Response.prototype = {
-    table: 'response'
 };
 
 
