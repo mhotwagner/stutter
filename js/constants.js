@@ -1,0 +1,1 @@
+var DB_URL = 'https://stutter-dev.firebaseio.com/'
