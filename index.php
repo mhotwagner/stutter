@@ -24,9 +24,9 @@
     'El hombre es mi amigo.',
     'El hombre no está aquí.',
     'De dónde estás?',
-    'Dódnde está la mujer?',
-    'Yo tengo veintiocho años hoy.',
-    'Hoy es el veintiocho de Mayo.',
+    'Dónde está la mujer?',
+    'Yo tengo una bicicleta.',
+    'La bicicleta es roja.',
     'Quién es el presidente?',
     'De quién es el libro?',
   ];
